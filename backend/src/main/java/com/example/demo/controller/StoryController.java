@@ -31,7 +31,11 @@ public class StoryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Story>> getStories() {
-        return ResponseEntity.ok(storyService.getActiveStories());
+    public ResponseEntity<List<Story>> getStories(@AuthenticationPrincipal UserDetails userDetails) {
+        User currentUser = null;
+        if (userDetails != null) {
+            currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        }
+        return ResponseEntity.ok(storyService.getActiveStories(currentUser));
     }
 }

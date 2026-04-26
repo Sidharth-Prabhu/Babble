@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Story;
 import com.example.demo.model.User;
+import com.example.demo.repository.FollowRepository;
 import com.example.demo.repository.StoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class StoryService {
     private final StoryRepository storyRepository;
+    private final FollowRepository followRepository;
     private final String UPLOAD_DIR = "uploads/";
 
     public Story createStory(MultipartFile file, User user) throws IOException {
@@ -47,8 +49,21 @@ public class StoryService {
         return storyRepository.save(story);
     }
 
-    public List<Story> getActiveStories() {
+    public List<Story> getActiveStories(User currentUser) {
         LocalDateTime twentyFourHoursAgo = LocalDateTime.now().minusHours(24);
-        return storyRepository.findByCreatedAtAfterOrderByCreatedAtDesc(twentyFourHoursAgo);
+        
+        if (currentUser == null) {
+            // If no user (shouldn't happen with security but just in case), return global or empty
+            return storyRepository.findByCreatedAtAfterOrderByCreatedAtDesc(twentyFourHoursAgo);
+        }
+
+        List<User> following = followRepository.findByFollower(currentUser).stream()
+                .map(com.example.demo.model.Follow::getFollowing)
+                .collect(java.util.stream.Collectors.toList());
+        
+        // Include self
+        following.add(currentUser);
+        
+        return storyRepository.findByUserInAndCreatedAtAfterOrderByCreatedAtDesc(following, twentyFourHoursAgo);
     }
 }

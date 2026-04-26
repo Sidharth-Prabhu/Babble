@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface StoryRepository extends JpaRepository<Story, Long> {
     List<Story> findByCreatedAtAfterOrderByCreatedAtDesc(LocalDateTime timestamp);
+    List<Story> findByUserInAndCreatedAtAfterOrderByCreatedAtDesc(java.util.Collection<com.example.demo.model.User> users, LocalDateTime timestamp);
 }
