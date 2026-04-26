@@ -1,0 +1,63 @@
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 10px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  gap: 4px;
+  flex: 1;
+  padding: 8px 0;
+  transition: all 0.2s ease;
+}
+
+.nav-item .nav-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-dim);
+  transition: color 0.2s;
+}
+
+.nav-item.active .nav-label {
+  color: var(--primary);
+}
+
+.nav-item:active {
+  transform: scale(0.9);
+}
+
+/* Hide labels on mobile to look more like Instagram */
+@media (max-width: 480px) {
+  .nav-item .nav-label {
+    display: none;
+  }
+  .bottom-nav {
+    height: 55px;
+  }
+}
+
+/* On desktop, show it on the side? The user asked for bottom nav for now, so I'll keep it bottom but maybe wider */
+@media (min-width: 768px) {
+  .bottom-nav {
+    max-width: 440px;
+    margin: 0 auto;
+    border-radius: 20px 20px 0 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

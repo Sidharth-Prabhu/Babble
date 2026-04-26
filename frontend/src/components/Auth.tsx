@@ -49,7 +49,7 @@ const Auth: React.FC = () => {
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
-          {!isLogin && (
+          {isLogin ? (
             <div className="input-group">
               <User className="input-icon" size={20} />
               <input
@@ -60,18 +60,30 @@ const Auth: React.FC = () => {
                 required
               />
             </div>
+          ) : (
+            <>
+              <div className="input-group">
+                <User className="input-icon" size={20} />
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={formData.username}
+                  onChange={(e) => setFormData({...formData, username: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <Mail className="input-icon" size={20} />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  required
+                />
+              </div>
+            </>
           )}
-          
-          <div className="input-group">
-            <Mail className="input-icon" size={20} />
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              required
-            />
-          </div>
 
           <div className="input-group">
             <Lock className="input-icon" size={20} />

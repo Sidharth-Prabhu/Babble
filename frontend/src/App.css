@@ -2,48 +2,101 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-bottom: 70px; /* Space for BottomNav */
 }
 
 .top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: var(--bg-surface);
+  padding: 0.8rem 1.5rem;
+  background: var(--bg-deep);
   border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 60px;
+}
+
+.top-nav-left, .top-nav-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.top-nav-right {
+  justify-content: flex-end;
+}
+
+.plus-btn {
+  background: var(--bg-elevated);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: all 0.2s;
+}
+
+.plus-btn:hover {
+  background: var(--border);
+  transform: rotate(90deg);
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: 70px;
+  left: 15px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 8px;
+  width: 180px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  z-index: 1001;
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: none;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--primary);
 }
 
 .top-nav .logo {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary);
-}
-
-.user-profile {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.logout-btn {
-  padding: 0.5rem 1rem;
-  background: var(--bg-elevated);
-  color: #fff;
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-.logout-btn:hover {
-  background: var(--error);
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.5px;
 }
 
 .content {
   flex: 1;
+  padding: 20px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.profile-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .content h1 {

@@ -1,0 +1,139 @@
+.upload-page-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-deep);
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-page-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface);
+}
+
+.upload-page-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.back-btn, .share-btn {
+  background: none;
+  padding: 8px;
+}
+
+.share-btn {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.share-btn:disabled {
+  color: var(--text-dim);
+  opacity: 0.5;
+}
+
+.upload-page-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.upload-form-full {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-section {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background: var(--bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-dim);
+}
+
+.preview-full {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-full img, .preview-full video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.change-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.5);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.details-section {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+.input-row input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+}
+
+.details-section textarea {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  color: #fff;
+  resize: none;
+  font-family: inherit;
+  font-size: 15px;
+}
+
+/* Desktop optimization */
+@media (min-width: 768px) {
+  .upload-page-container {
+    max-width: 500px;
+    margin: 0 auto;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+}
