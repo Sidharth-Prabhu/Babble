@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+export const BASE_URL = 'http://192.168.0.4:8080';
+
 const api = axios.create({
-  baseURL: 'http://192.168.0.4:8080/api',
+  baseURL: `${BASE_URL}/api`,
 });
 
 api.interceptors.request.use((config) => {
@@ -13,6 +15,27 @@ api.interceptors.request.use((config) => {
     console.warn('No token found in localStorage');
   }
   return config;
+});
+
+export const getUserProfile = (username: string) => api.get(`/users/profile/${username}`);
+export const getCurrentUser = () => api.get('/users/me');
+export const updateProfile = (data: { displayName: string, bio: string }) => api.put('/users/profile', data);
+export const uploadProfileImage = (file: File) => {
+  const data = new FormData();
+  data.append('file', file);
+  return api.post('/users/profile/image', data);
+};
+export const uploadBannerImage = (file: File) => {
+  const data = new FormData();
+  data.append('file', file);
+  return api.post('/users/profile/banner', data);
+};
+export const getAllPosts = () => api.get('/posts');
+
+export const toggleLike = (postId: number) => api.post(`/likes/${postId}`);
+export const getComments = (postId: number) => api.get(`/comments/${postId}`);
+export const addComment = (postId: number, content: string) => api.post(`/comments/${postId}`, content, {
+  headers: { 'Content-Type': 'text/plain' }
 });
 
 export default api;

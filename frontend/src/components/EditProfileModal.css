@@ -1,0 +1,188 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.edit-profile-modal {
+  background: #121212;
+  width: 100%;
+  max-width: 500px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding: 20px 20px 40px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Image Edit Section */
+.image-edit-section {
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.banner-edit {
+  height: 150px;
+  border-radius: 20px;
+  background: #222;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.banner-edit img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-edit .placeholder {
+  width: 100%;
+  height: 100%;
+  background: #222;
+}
+
+.profile-pic-edit {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid #121212;
+  position: absolute;
+  bottom: -40px;
+  left: 20px;
+  overflow: hidden;
+  background: #333;
+  cursor: pointer;
+}
+
+.profile-pic-edit img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-pic-edit .placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: bold;
+  color: #09E85E;
+}
+
+.edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+/* Form */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-field label {
+  color: #888;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input-field input, .input-field textarea {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 12px;
+  color: #fff;
+  font-size: 16px;
+  outline: none;
+}
+
+.input-field input:focus, .input-field textarea:focus {
+  border-color: var(--primary);
+}
+
+.save-btn {
+  background: var(--primary);
+  color: #000;
+  border: none;
+  padding: 16px;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+  box-shadow: 0 0 20px var(--primary-glow);
+}
+
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

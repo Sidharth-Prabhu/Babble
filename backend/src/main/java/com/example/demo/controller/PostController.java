@@ -32,4 +32,13 @@ public class PostController {
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow();
         return ResponseEntity.ok(postService.createPost(title, description, tags, file, user));
     }
+
+    @GetMapping
+    public ResponseEntity<java.util.List<com.example.demo.dto.PostResponse>> getAllPosts(@AuthenticationPrincipal UserDetails userDetails) {
+        User currentUser = null;
+        if (userDetails != null) {
+            currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        }
+        return ResponseEntity.ok(postService.getAllPosts(currentUser));
+    }
 }

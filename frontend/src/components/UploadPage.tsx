@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, Upload, Image as ImageIcon, Video, Tag, FileText } from 'lucide-react';
+import { ChevronLeft, Upload, Tag, FileText } from 'lucide-react';
 import api from '../utils/api';
 import './UploadPage.css';
 

@@ -32,6 +32,22 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    private String displayName;
+    
+    @Column(length = 500)
+    private String bio;
+    
+    private String profilePictureUrl;
+    private String bannerUrl;
+    
+    private java.time.LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = java.time.LocalDateTime.now();
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

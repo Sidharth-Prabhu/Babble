@@ -1,0 +1,147 @@
+.comment-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.comment-drawer {
+  background: #121212;
+  width: 100%;
+  max-width: 500px;
+  height: 70vh;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.drawer-handle {
+  width: 40px;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  margin: 10px auto;
+}
+
+.drawer-header {
+  padding: 0 20px 15px;
+  border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.comments-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.comment-item {
+  display: flex;
+  gap: 12px;
+}
+
+.comment-avatar, .comment-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.comment-avatar-placeholder {
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.comment-content p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.comment-username {
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.comment-date {
+  font-size: 11px;
+  color: #888;
+  display: block;
+  margin-top: 4px;
+}
+
+.comment-input-area {
+  padding: 15px 20px;
+  padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid #222;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #121212;
+}
+
+.comment-input-area input {
+  flex: 1;
+  background: #1e1e1e;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.comment-input-area button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.comments-loading, .no-comments {
+  text-align: center;
+  color: #888;
+  padding: 40px 0;
+  font-size: 14px;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

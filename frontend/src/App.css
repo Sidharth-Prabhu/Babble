@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 70px; /* Space for BottomNav */
+  padding-bottom: 90px; /* Space for taller BottomNav + safe area */
 }
 
 .top-nav {
@@ -85,21 +85,30 @@
 
 .content {
   flex: 1;
-  padding: 20px;
-  max-width: 600px;
   width: 100%;
-  margin: 0 auto;
 }
 
-.profile-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
+.logout-mini-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #888;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
-.content h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+.logout-mini-btn:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff4d4d;
 }
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+

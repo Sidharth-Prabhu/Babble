@@ -18,27 +18,21 @@ import java.util.UUID;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final com.example.demo.repository.LikeRepository likeRepository;
+    private final com.example.demo.repository.CommentRepository commentRepository;
     private final String UPLOAD_DIR = "uploads/";
 
     public Post createPost(String title, String description, String tags, MultipartFile file, User user) throws IOException {
-        // Ensure upload directory exists
+        // ... (rest same as before)
         Path uploadPath = Paths.get(UPLOAD_DIR);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-
-        // Generate unique filename
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         Path filePath = uploadPath.resolve(fileName);
-        
-        // Save file
         Files.copy(file.getInputStream(), filePath);
-
-        // Determine media type
         String contentType = file.getContentType();
         String mediaType = (contentType != null && contentType.startsWith("video")) ? "video" : "image";
-
-        // Save metadata
         Post post = Post.builder()
                 .title(title)
                 .description(description)
@@ -47,7 +41,28 @@ public class PostService {
                 .mediaType(mediaType)
                 .user(user)
                 .build();
-
         return postRepository.save(post);
+    }
+
+    public java.util.List<com.example.demo.dto.PostResponse> getAllPosts(User currentUser) {
+        return postRepository.findAllByOrderByCreatedAtDesc().stream()
+                .map(post -> convertToResponse(post, currentUser))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    public com.example.demo.dto.PostResponse convertToResponse(Post post, User currentUser) {
+        return com.example.demo.dto.PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .description(post.getDescription())
+                .tags(post.getTags())
+                .mediaUrl(post.getMediaUrl())
+                .mediaType(post.getMediaType())
+                .user(post.getUser())
+                .createdAt(post.getCreatedAt())
+                .likesCount(likeRepository.countByPost(post))
+                .commentsCount(commentRepository.countByPost(post))
+                .likedByCurrentUser(currentUser != null && likeRepository.existsByUserAndPost(currentUser, post))
+                .build();
     }
 }

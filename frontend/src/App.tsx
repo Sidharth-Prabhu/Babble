@@ -1,15 +1,19 @@
 import { useEffect, useState } from 'react'
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { Plus, Edit3, Upload, X } from 'lucide-react'
 import './App.css'
 import Auth from './components/Auth'
 import BottomNav from './components/BottomNav'
 import UploadPage from './components/UploadPage'
+import ProfilePage from './components/ProfilePage'
+import HomePage from './components/HomePage'
 
 function App() {
   const [user, setUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState('home');
   const [showDropdown, setShowDropdown] = useState(false);
   const [showUploadPage, setShowUploadPage] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -24,43 +28,30 @@ function App() {
     setUser(null);
   };
 
+  const getActiveTab = () => {
+    const path = location.pathname;
+    if (path === '/') return 'home';
+    if (path === '/search') return 'search';
+    if (path === '/messages') return 'messages';
+    if (path.startsWith('/profile')) return 'account';
+    return 'home';
+  };
+
   if (!user) {
     return <Auth />;
   }
 
-  // Handle full-screen upload page
   if (showUploadPage) {
     return (
       <UploadPage 
         onClose={() => setShowUploadPage(false)} 
         onUploadSuccess={() => {
           setShowUploadPage(false);
-          setActiveTab('home');
+          navigate(`/profile/${user.username}`);
         }}
       />
     );
   }
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'home':
-        return <h1>Home Feed</h1>;
-      case 'search':
-        return <h1>Search</h1>;
-      case 'messages':
-        return <h1>Messages</h1>;
-      case 'account':
-        return (
-          <div className="profile-page">
-            <h1>Account Settings</h1>
-            <p>Email: {user.email}</p>
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
-          </div>
-        );
-      default:
-        return <h1>Home Feed</h1>;
-    }
-  };
 
   return (
     <div className="app-main">
@@ -91,17 +82,32 @@ function App() {
           )}
         </div>
         
-        <div className="logo">SocialApp</div>
-        <div className="top-nav-right"></div>
+        <div className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>SocialApp</div>
+        <div className="top-nav-right">
+          <button onClick={handleLogout} className="logout-mini-btn">Logout</button>
+        </div>
       </nav>
       
       <main className="content">
-        {renderContent()}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/search" element={<h1>Search</h1>} />
+          <Route path="/messages" element={<h1>Messages</h1>} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
+        </Routes>
       </main>
 
-      <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+      <BottomNav 
+        activeTab={getActiveTab()} 
+        setActiveTab={(tab) => {
+          if (tab === 'home') navigate('/');
+          else if (tab === 'account') navigate(`/profile/${user.username}`);
+          else navigate(`/${tab}`);
+        }} 
+      />
     </div>
   )
 }
 
 export default App
+

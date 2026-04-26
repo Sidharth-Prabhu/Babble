@@ -12,31 +12,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "posts")
-public class Post {
-
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private String tags;
-
-    @Column(nullable = false)
-    private String mediaUrl;
-
-    @Column(nullable = false)
-    private String mediaType; // "image" or "video"
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "user"})
+    private Post post;
 
     private LocalDateTime createdAt;
 
