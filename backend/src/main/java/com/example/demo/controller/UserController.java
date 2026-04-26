@@ -62,4 +62,10 @@ public class UserController {
     ) throws IOException {
         return ResponseEntity.ok(userService.uploadBannerImage(userDetails.getUsername(), file));
     }
+
+    @PostMapping("/heartbeat")
+    public ResponseEntity<Void> updateHeartbeat(@AuthenticationPrincipal UserDetails userDetails) {
+        userService.updateLastSeen(userDetails.getUsername());
+        return ResponseEntity.ok().build();
+    }
 }

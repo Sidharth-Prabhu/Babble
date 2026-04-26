@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { Plus, Edit3, Upload, X } from 'lucide-react'
 import './App.css'
+import { updateHeartbeat } from './utils/api'
 import Auth from './components/Auth'
 import BottomNav from './components/BottomNav'
 import UploadPage from './components/UploadPage'
 import ProfilePage from './components/ProfilePage'
 import HomePage from './components/HomePage'
 import SearchPage from './components/SearchPage'
+import MessagesPage from './components/MessagesPage'
+import ChatRoom from './components/ChatRoom'
 
 function App() {
   const [user, setUser] = useState<any>(null);
@@ -15,6 +18,7 @@ function App() {
   const [showUploadPage, setShowUploadPage] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const isChatPage = location.pathname.startsWith('/messages/');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -22,6 +26,20 @@ function App() {
       setUser(JSON.parse(savedUser));
     }
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    
+    // Immediate heartbeat
+    updateHeartbeat().catch(err => console.error('Heartbeat failed:', err));
+    
+    // Pulse every 60 seconds
+    const interval = setInterval(() => {
+      updateHeartbeat().catch(err => console.error('Heartbeat failed:', err));
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -56,56 +74,61 @@ function App() {
 
   return (
     <div className="app-main">
-      <nav className="top-nav">
-        <div className="top-nav-left">
-          <button 
-            className="plus-btn" 
-            onClick={() => setShowDropdown(!showDropdown)}
-            aria-label="Create new"
-          >
-            {showDropdown ? <X size={24} /> : <Plus size={24} />}
-          </button>
+      {!isChatPage && (
+        <nav className="top-nav">
+          <div className="top-nav-left">
+            <button 
+              className="plus-btn" 
+              onClick={() => setShowDropdown(!showDropdown)}
+              aria-label="Create new"
+            >
+              {showDropdown ? <X size={24} /> : <Plus size={24} />}
+            </button>
+            
+            {showDropdown && (
+              <div className="nav-dropdown animate-fade-in">
+                <button className="dropdown-item" onClick={() => setShowDropdown(false)}>
+                  <Edit3 size={18} />
+                  <span>Make a Post</span>
+                </button>
+                <button className="dropdown-item" onClick={() => {
+                  setShowUploadPage(true);
+                  setShowDropdown(false);
+                }}>
+                  <Upload size={18} />
+                  <span>Upload</span>
+                </button>
+              </div>
+            )}
+          </div>
           
-          {showDropdown && (
-            <div className="nav-dropdown animate-fade-in">
-              <button className="dropdown-item" onClick={() => setShowDropdown(false)}>
-                <Edit3 size={18} />
-                <span>Make a Post</span>
-              </button>
-              <button className="dropdown-item" onClick={() => {
-                setShowUploadPage(true);
-                setShowDropdown(false);
-              }}>
-                <Upload size={18} />
-                <span>Upload</span>
-              </button>
-            </div>
-          )}
-        </div>
-        
-        <div className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>Babble</div>
-        <div className="top-nav-right">
-          <button onClick={handleLogout} className="logout-mini-btn">Logout</button>
-        </div>
-      </nav>
+          <div className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>Babble</div>
+          <div className="top-nav-right">
+            <button onClick={handleLogout} className="logout-mini-btn">Logout</button>
+          </div>
+        </nav>
+      )}
       
       <main className="content">
         <Routes>
           <Route path="/" element={<HomePage currentUser={user} />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/messages" element={<h1>Messages</h1>} />
+          <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/messages/:username" element={<ChatRoom />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
         </Routes>
       </main>
 
-      <BottomNav 
-        activeTab={getActiveTab()} 
-        setActiveTab={(tab) => {
-          if (tab === 'home') navigate('/');
-          else if (tab === 'account') navigate(`/profile/${user.username}`);
-          else navigate(`/${tab}`);
-        }} 
-      />
+      {!isChatPage && (
+        <BottomNav 
+          activeTab={getActiveTab()} 
+          setActiveTab={(tab) => {
+            if (tab === 'home') navigate('/');
+            else if (tab === 'account') navigate(`/profile/${user.username}`);
+            else navigate(`/${tab}`);
+          }} 
+        />
+      )}
     </div>
   )
 }

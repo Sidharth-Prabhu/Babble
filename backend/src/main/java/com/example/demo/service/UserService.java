@@ -44,12 +44,20 @@ public class UserService {
                 .profilePictureUrl(user.getProfilePictureUrl())
                 .bannerUrl(user.getBannerUrl())
                 .createdAt(user.getCreatedAt())
+                .lastSeenAt(user.getLastSeenAt())
                 .posts(posts)
                 .totalPosts(posts.size())
                 .followers(followRepository.countByFollowing(user))
                 .following(followRepository.countByFollower(user))
                 .likes(posts.stream().mapToLong(com.example.demo.dto.PostResponse::getLikesCount).sum())
                 .build();
+    }
+
+    public void updateLastSeen(String username) {
+        userRepository.findByUsername(username).ifPresent(user -> {
+            user.setLastSeenAt(java.time.LocalDateTime.now());
+            userRepository.save(user);
+        });
     }
 
     public User updateProfile(String username, UpdateProfileRequest request) {

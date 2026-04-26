@@ -21,6 +21,7 @@ public class UserProfileResponse {
     private String profilePictureUrl;
     private String bannerUrl;
     private LocalDateTime createdAt;
+    private LocalDateTime lastSeenAt;
     private List<PostResponse> posts;
     private long totalPosts;
     private long followers;

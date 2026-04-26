@@ -80,6 +80,16 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<PostResponse> getExplorePosts(User currentUser) {
+        List<Post> allPosts = postRepository.findAll();
+        java.util.Collections.shuffle(allPosts);
+        return allPosts.stream()
+                .limit(30)
+                .map(post -> convertToResponse(post, currentUser))
+                .collect(Collectors.toList());
+    }
+
     public PostResponse convertToResponse(Post post, User currentUser) {
         return PostResponse.builder()
                 .id(post.getId())

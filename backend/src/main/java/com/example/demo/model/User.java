@@ -41,6 +41,7 @@ public class User implements UserDetails {
     private String bannerUrl;
     
     private java.time.LocalDateTime createdAt;
+    private java.time.LocalDateTime lastSeenAt;
 
     @PrePersist
     protected void onCreate() {

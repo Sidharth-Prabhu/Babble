@@ -52,4 +52,13 @@ public class PostController {
         return ResponseEntity.ok(postService.getFollowingPosts(currentUser));
     }
 
+    @GetMapping("/explore")
+    public ResponseEntity<java.util.List<com.example.demo.dto.PostResponse>> getExplorePosts(@AuthenticationPrincipal UserDetails userDetails) {
+        User currentUser = null;
+        if (userDetails != null) {
+            currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        }
+        return ResponseEntity.ok(postService.getExplorePosts(currentUser));
+    }
+
 }
