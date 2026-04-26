@@ -82,7 +82,7 @@ function App() {
           )}
         </div>
         
-        <div className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>SocialApp</div>
+        <div className="logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>Babble</div>
         <div className="top-nav-right">
           <button onClick={handleLogout} className="logout-mini-btn">Logout</button>
         </div>
@@ -90,7 +90,7 @@ function App() {
       
       <main className="content">
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage currentUser={user} />} />
           <Route path="/search" element={<h1>Search</h1>} />
           <Route path="/messages" element={<h1>Messages</h1>} />
           <Route path="/profile/:username" element={<ProfilePage />} />

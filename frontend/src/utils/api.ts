@@ -32,6 +32,13 @@ export const uploadBannerImage = (file: File) => {
 };
 export const getAllPosts = () => api.get('/posts');
 
+export const getStories = () => api.get('/stories');
+export const uploadStory = (file: File) => {
+  const data = new FormData();
+  data.append('file', file);
+  return api.post('/stories/upload', data);
+};
+
 export const toggleLike = (postId: number) => api.post(`/likes/${postId}`);
 export const getComments = (postId: number) => api.get(`/comments/${postId}`);
 export const addComment = (postId: number, content: string) => api.post(`/comments/${postId}`, content, {

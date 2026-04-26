@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { getAllPosts } from '../utils/api';
 import PostCard from './PostCard';
 import type { Post } from './PostCard';
+import StoriesBar from './StoriesBar';
 import './HomePage.css';
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+  currentUser: any;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ currentUser }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,6 +32,7 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="home-container">
+      <StoriesBar currentUser={currentUser} />
       {posts.map((post) => (
         <PostCard key={post.id} post={post} onUpdate={fetchPosts} />
       ))}

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, MessageCircle, UserPlus, Edit3, Calendar, Clock, X } from 'lucide-react';
-import { getUserProfile, getCurrentUser, BASE_URL } from '../utils/api';
+import { getUserProfile, getCurrentUser, getStories, BASE_URL } from '../utils/api';
 import EditProfileModal from './EditProfileModal';
 import PostCard from './PostCard';
 import type { Post as IPost } from './PostCard';
+import StoryViewer from './StoryViewer';
+import type { UserStories } from './StoriesBar';
 import './ProfilePage.css';
 
 interface Post {
@@ -40,6 +42,8 @@ const ProfilePage: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
+  const [userStories, setUserStories] = useState<UserStories | null>(null);
+  const [showStories, setShowStories] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -49,6 +53,21 @@ const ProfilePage: React.FC = () => {
       const meRes = await getCurrentUser();
       if (meRes.data.username === res.data.username) {
         setIsMe(true);
+      }
+
+      // Fetch stories to check for active ones
+      const storiesRes = await getStories();
+      const allStories = storiesRes.data;
+      const myStories = allStories.filter((s: any) => s.user.username === (username || ''));
+      
+      if (myStories.length > 0) {
+        setUserStories({
+          username: username || '',
+          profilePictureUrl: res.data.profilePictureUrl,
+          stories: myStories.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        });
+      } else {
+        setUserStories(null);
       }
     } catch (err) {
       console.error('Error fetching profile:', err);
@@ -69,6 +88,12 @@ const ProfilePage: React.FC = () => {
     return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   };
 
+  const handleProfilePicClick = () => {
+    if (userStories) {
+      setShowStories(true);
+    }
+  };
+
   return (
     <div className="profile-container">
       {/* Banner Section */}
@@ -83,7 +108,11 @@ const ProfilePage: React.FC = () => {
 
       {/* Profile Info Header */}
       <div className="profile-header">
-        <div className="profile-pic-container">
+        <div 
+          className={`profile-pic-container ${userStories ? 'has-story' : ''}`}
+          onClick={handleProfilePicClick}
+          style={{ cursor: userStories ? 'pointer' : 'default' }}
+        >
           {profile.profilePictureUrl ? (
             <img src={`${BASE_URL}${profile.profilePictureUrl}`} alt="Profile" className="profile-pic" />
           ) : (
@@ -178,6 +207,13 @@ const ProfilePage: React.FC = () => {
             <PostCard post={selectedPost} onUpdate={fetchProfile} />
           </div>
         </div>
+      )}
+
+      {showStories && userStories && (
+        <StoryViewer 
+          userStories={userStories} 
+          onClose={() => setShowStories(false)} 
+        />
       )}
     </div>
   );

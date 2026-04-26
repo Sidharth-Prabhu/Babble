@@ -88,7 +88,10 @@ const PostCard: React.FC<PostCardProps> = ({ post: initialPost, onUpdate }) => {
         {post.mediaType === 'video' ? (
           <video 
             src={`${BASE_URL}${post.mediaUrl}`} 
-            controls 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
             className="post-media"
           />
         ) : (
