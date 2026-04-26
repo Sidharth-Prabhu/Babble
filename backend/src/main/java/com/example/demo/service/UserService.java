@@ -4,6 +4,7 @@ import com.example.demo.dto.UpdateProfileRequest;
 import com.example.demo.dto.UserProfileResponse;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
+import com.example.demo.repository.FollowRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final FollowRepository followRepository;
     private final PostService postService;
     private final String UPLOAD_DIR = "uploads/";
 
@@ -44,7 +46,8 @@ public class UserService {
                 .createdAt(user.getCreatedAt())
                 .posts(posts)
                 .totalPosts(posts.size())
-                .followers(1200) // Placeholder
+                .followers(followRepository.countByFollowing(user))
+                .following(followRepository.countByFollower(user))
                 .likes(posts.stream().mapToLong(com.example.demo.dto.PostResponse::getLikesCount).sum())
                 .build();
     }
@@ -76,6 +79,17 @@ public class UserService {
         user.setBannerUrl("/" + UPLOAD_DIR + fileName);
         userRepository.save(user);
         return user.getBannerUrl();
+    }
+
+    public List<com.example.demo.dto.UserSearchResponse> searchUsers(String query, User currentUser) {
+        return userRepository.findByUsernameContainingIgnoreCaseOrDisplayNameContainingIgnoreCase(query, query).stream()
+                .map(user -> com.example.demo.dto.UserSearchResponse.builder()
+                        .username(user.getUsername())
+                        .displayName(user.getDisplayName() != null ? user.getDisplayName() : user.getUsername())
+                        .profilePictureUrl(user.getProfilePictureUrl())
+                        .following(currentUser != null && followRepository.existsByFollowerAndFollowing(currentUser, user))
+                        .build())
+                .collect(java.util.stream.Collectors.toList());
     }
 
     private String saveFile(MultipartFile file, String prefix) throws IOException {

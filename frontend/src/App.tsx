@@ -7,6 +7,7 @@ import BottomNav from './components/BottomNav'
 import UploadPage from './components/UploadPage'
 import ProfilePage from './components/ProfilePage'
 import HomePage from './components/HomePage'
+import SearchPage from './components/SearchPage'
 
 function App() {
   const [user, setUser] = useState<any>(null);
@@ -91,7 +92,7 @@ function App() {
       <main className="content">
         <Routes>
           <Route path="/" element={<HomePage currentUser={user} />} />
-          <Route path="/search" element={<h1>Search</h1>} />
+          <Route path="/search" element={<SearchPage />} />
           <Route path="/messages" element={<h1>Messages</h1>} />
           <Route path="/profile/:username" element={<ProfilePage />} />
         </Routes>

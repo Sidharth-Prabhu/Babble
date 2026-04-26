@@ -28,18 +28,23 @@ const HomePage: React.FC<HomePageProps> = ({ currentUser }) => {
     fetchPosts();
   }, []);
 
-  if (loading) return <div className="loading">Loading Feed...</div>;
-
   return (
     <div className="home-container">
       <StoriesBar currentUser={currentUser} />
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} onUpdate={fetchPosts} />
-      ))}
-      {posts.length === 0 && (
-        <div className="no-posts-feed">
-          <p>No posts to show. Follow some people!</p>
-        </div>
+      
+      {loading ? (
+        <div className="loading-feed">Loading Feed...</div>
+      ) : (
+        <>
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} onUpdate={fetchPosts} />
+          ))}
+          {posts.length === 0 && (
+            <div className="no-posts-feed">
+              <p>No posts to show yet. Be the first to share something!</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

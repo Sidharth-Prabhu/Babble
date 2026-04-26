@@ -23,6 +23,7 @@ public class UserProfileResponse {
     private LocalDateTime createdAt;
     private List<PostResponse> posts;
     private long totalPosts;
-    private long followers; // Placeholder
-    private long likes; // Placeholder
+    private long followers;
+    private long following;
+    private long likes;
 }

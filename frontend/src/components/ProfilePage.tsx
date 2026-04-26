@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid, MessageCircle, UserPlus, Edit3, Calendar, Clock, X } from 'lucide-react';
-import { getUserProfile, getCurrentUser, getStories, BASE_URL } from '../utils/api';
+import { getUserProfile, getCurrentUser, getStories, toggleFollow, getFollowStatus, BASE_URL } from '../utils/api';
 import EditProfileModal from './EditProfileModal';
 import PostCard from './PostCard';
 import type { Post as IPost } from './PostCard';
@@ -32,6 +32,7 @@ interface UserProfile {
   posts: Post[];
   totalPosts: number;
   followers: number;
+  following: number;
   likes: number;
 }
 
@@ -44,6 +45,7 @@ const ProfilePage: React.FC = () => {
   const [selectedPost, setSelectedPost] = useState<IPost | null>(null);
   const [userStories, setUserStories] = useState<UserStories | null>(null);
   const [showStories, setShowStories] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -53,6 +55,9 @@ const ProfilePage: React.FC = () => {
       const meRes = await getCurrentUser();
       if (meRes.data.username === res.data.username) {
         setIsMe(true);
+      } else {
+        const followStatus = await getFollowStatus(username || '');
+        setIsFollowing(followStatus.data.following);
       }
 
       // Fetch stories to check for active ones
@@ -91,6 +96,17 @@ const ProfilePage: React.FC = () => {
   const handleProfilePicClick = () => {
     if (userStories) {
       setShowStories(true);
+    }
+  };
+
+  const handleFollowToggle = async () => {
+    try {
+      const res = await toggleFollow(username || '');
+      setIsFollowing(res.data.following);
+      // Refresh profile to update follower count
+      fetchProfile();
+    } catch (err) {
+      console.error('Error toggling follow:', err);
     }
   };
 
@@ -141,8 +157,14 @@ const ProfilePage: React.FC = () => {
           <div className="stat-divider" />
           <div className="stat-item">
             <UserPlus size={20} />
-            <span className="stat-value">{(profile.followers / 1000).toFixed(1)}k</span>
+            <span className="stat-value">{profile.followers}</span>
             <span className="stat-label">Followers</span>
+          </div>
+          <div className="stat-divider" />
+          <div className="stat-item">
+            <UserPlus size={20} />
+            <span className="stat-value">{profile.following}</span>
+            <span className="stat-label">Following</span>
           </div>
           <div className="stat-divider" />
           <div className="stat-item">
@@ -160,7 +182,12 @@ const ProfilePage: React.FC = () => {
             </button>
           ) : (
             <>
-              <button className="btn-primary follow-btn">Follow +</button>
+              <button 
+                className={`btn-primary follow-btn ${isFollowing ? 'following' : ''}`}
+                onClick={handleFollowToggle}
+              >
+                {isFollowing ? 'Following' : 'Follow +'}
+              </button>
               <button className="btn-secondary chat-btn">Chat <MessageCircle size={18} /></button>
             </>
           )}

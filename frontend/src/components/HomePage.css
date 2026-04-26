@@ -7,6 +7,12 @@
   gap: 20px;
 }
 
+.loading-feed {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-dim);
+}
+
 .post-card {
   background: var(--bg-surface);
   border-radius: 20px;

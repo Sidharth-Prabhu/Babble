@@ -3,9 +3,10 @@ package com.example.demo.service;
 import com.example.demo.dto.PostResponse;
 import com.example.demo.model.Post;
 import com.example.demo.model.User;
-import com.example.demo.repository.CommentRepository;
-import com.example.demo.repository.LikeRepository;
+import com.example.demo.repository.FollowRepository;
 import com.example.demo.repository.PostRepository;
+import com.example.demo.repository.LikeRepository;
+import com.example.demo.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
+    private final FollowRepository followRepository;
     private final String UPLOAD_DIR = "uploads/";
 
     @Transactional
@@ -58,6 +60,22 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts(User currentUser) {
         return postRepository.findAllByOrderByCreatedAtDesc().stream()
+                .map(post -> convertToResponse(post, currentUser))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostResponse> getFollowingPosts(User currentUser) {
+        if (currentUser == null) return List.of();
+        List<User> following = followRepository.findByFollower(currentUser).stream()
+                .map(com.example.demo.model.Follow::getFollowing)
+                .collect(Collectors.toList());
+        
+        // Also include current user's own posts in their following feed? 
+        // Usually, yes, or just followed people. Let's stick to followed people.
+        if (following.isEmpty()) return List.of();
+        
+        return postRepository.findByUserInOrderByCreatedAtDesc(following).stream()
                 .map(post -> convertToResponse(post, currentUser))
                 .collect(Collectors.toList());
     }

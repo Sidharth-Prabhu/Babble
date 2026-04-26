@@ -210,6 +210,13 @@
   cursor: pointer;
 }
 
+.follow-btn.following {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: #fff;
+}
+
+
 .btn-primary:active, .btn-secondary:active {
   transform: scale(0.98);
 }

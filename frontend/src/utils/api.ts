@@ -45,4 +45,10 @@ export const addComment = (postId: number, content: string) => api.post(`/commen
 export const deleteComment = (commentId: number) => api.delete(`/comments/${commentId}`);
 export const updateComment = (commentId: number, content: string) => api.put(`/comments/${commentId}`, { content });
 
+// Follows
+export const toggleFollow = (username: string) => api.post(`/follows/${username}`);
+export const getFollowStatus = (username: string) => api.get(`/follows/status/${username}`);
+export const getFollowingPosts = () => api.get('/posts/following');
+export const searchUsers = (query: string) => api.get('/users/search', { params: { query } });
+
 export default api;

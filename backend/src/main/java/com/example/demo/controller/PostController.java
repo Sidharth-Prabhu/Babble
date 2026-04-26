@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import com.example.demo.repository.PostRepository;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -42,4 +43,13 @@ public class PostController {
         }
         return ResponseEntity.ok(postService.getAllPosts(currentUser));
     }
+    @GetMapping("/following")
+    public ResponseEntity<java.util.List<com.example.demo.dto.PostResponse>> getFollowingPosts(@AuthenticationPrincipal UserDetails userDetails) {
+        User currentUser = null;
+        if (userDetails != null) {
+            currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+        }
+        return ResponseEntity.ok(postService.getFollowingPosts(currentUser));
+    }
+
 }

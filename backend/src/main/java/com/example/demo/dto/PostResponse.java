@@ -18,7 +18,7 @@ public class PostResponse {
     private String tags;
     private String mediaUrl;
     private String mediaType;
-    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"password", "email", "authorities", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired"})
+    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"password", "email", "authorities", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "hibernateLazyInitializer", "handler"})
     private User user;
     private LocalDateTime createdAt;
     private long likesCount;

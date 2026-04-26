@@ -12,22 +12,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "stories")
-public class Story {
+@Table(name = "follows", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"follower_id", "following_id"})
+})
+public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String mediaUrl;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "follower_id", nullable = false)
+    private User follower;
 
-    @Column(nullable = false)
-    private String mediaType; // "image" or "video"
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"password", "email", "authorities", "enabled", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "hibernateLazyInitializer", "handler"})
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "following_id", nullable = false)
+    private User following;
 
     private LocalDateTime createdAt;
 
