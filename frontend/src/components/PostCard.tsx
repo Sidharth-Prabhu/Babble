@@ -3,7 +3,7 @@ import { Heart, MessageCircle, Send, MoreHorizontal, Bookmark } from 'lucide-rea
 import { toggleLike, BASE_URL } from '../utils/api';
 import CommentDrawer from './CommentDrawer';
 
-export interface Post {
+export type Post = {
   id: number;
   title: string;
   description: string;

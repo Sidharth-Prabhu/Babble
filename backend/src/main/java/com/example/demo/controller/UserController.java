@@ -62,15 +62,4 @@ public class UserController {
     ) throws IOException {
         return ResponseEntity.ok(userService.uploadBannerImage(userDetails.getUsername(), file));
     }
-    @GetMapping("/search")
-    public ResponseEntity<java.util.List<com.example.demo.dto.UserSearchResponse>> searchUsers(
-            @RequestParam String query,
-            @AuthenticationPrincipal UserDetails userDetails
-    ) {
-        User currentUser = null;
-        if (userDetails != null) {
-            currentUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
-        }
-        return ResponseEntity.ok(userService.searchUsers(query, currentUser));
-    }
 }

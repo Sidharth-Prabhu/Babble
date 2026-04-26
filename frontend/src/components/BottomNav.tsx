@@ -12,39 +12,33 @@ const BottomNav: React.FC<BottomNavProps> = ({ activeTab, setActiveTab }) => {
     { id: 'home', icon: Home, label: 'Home' },
     { id: 'search', icon: Search, label: 'Search' },
     { id: 'messages', icon: MessageCircle, label: 'Messages' },
-    { id: 'account', icon: User, label: 'Account' },
+    { id: 'account', icon: User, label: 'Profile' },
   ];
 
-  const activeIndex = navItems.findIndex(item => item.id === activeTab);
-
   return (
-    <nav className="bottom-nav">
-      <div 
-        className="nav-indicator" 
-        style={{ 
-          width: `${100 / navItems.length}%`,
-          transform: `translateX(${activeIndex * 100}%)`
-        }}
-      >
-        <div className="indicator-pill"></div>
-      </div>
-      {navItems.map((item) => (
-        <button
-          key={item.id}
-          className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
-          onClick={() => setActiveTab(item.id)}
-          aria-label={item.label}
-        >
-          <div className="icon-wrapper">
-            <item.icon 
-              size={24} 
-              strokeWidth={activeTab === item.id ? 2.5 : 2} 
-            />
-          </div>
-          <span className="nav-label">{item.label}</span>
-        </button>
-      ))}
-    </nav>
+    <div className="bottom-nav-container">
+      <nav className="bottom-nav-capsule">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            className={`nav-pill-item ${activeTab === item.id ? 'active' : ''}`}
+            onClick={() => setActiveTab(item.id)}
+            aria-label={item.label}
+          >
+            <div className="pill-content">
+              <item.icon 
+                size={22} 
+                className="nav-icon"
+                strokeWidth={activeTab === item.id ? 2.5 : 2} 
+              />
+              {activeTab === item.id && (
+                <span className="nav-label-pill">{item.label}</span>
+              )}
+            </div>
+          </button>
+        ))}
+      </nav>
+    </div>
   );
 };
 

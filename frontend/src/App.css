@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 90px; /* Space for taller BottomNav + safe area */
+  padding-bottom: 110px; /* Extra space for floating capsule nav */
 }
 
 .top-nav {

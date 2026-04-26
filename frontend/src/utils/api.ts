@@ -49,6 +49,6 @@ export const updateComment = (commentId: number, content: string) => api.put(`/c
 export const toggleFollow = (username: string) => api.post(`/follows/${username}`);
 export const getFollowStatus = (username: string) => api.get(`/follows/status/${username}`);
 export const getFollowingPosts = () => api.get('/posts/following');
-export const searchUsers = (query: string) => api.get('/users/search', { params: { query } });
+export const globalSearch = (query: string) => api.get('/search', { params: { query } });
 
 export default api;
