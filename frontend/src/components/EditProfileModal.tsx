@@ -80,7 +80,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ profile, onClose, o
           <div className="image-edit-section">
             <div className="banner-edit" onClick={() => document.getElementById('banner-upload')?.click()}>
               {profile.bannerUrl ? (
-                <img src={`http://192.168.0.4:8080${profile.bannerUrl}`} alt="Banner" />
+                <img src={`${BASE_URL}${profile.bannerUrl}`} alt="Banner" />
               ) : (
                 <div className="placeholder" />
               )}

@@ -21,16 +21,19 @@ public class Comment {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "user"})
     private Post post;
 
     private LocalDateTime createdAt;
+
+    @Column(name = "is_edited", nullable = false)
+    @Builder.Default
+    private Boolean edited = false;
 
     @PrePersist
     protected void onCreate() {

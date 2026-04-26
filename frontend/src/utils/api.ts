@@ -41,8 +41,8 @@ export const uploadStory = (file: File) => {
 
 export const toggleLike = (postId: number) => api.post(`/likes/${postId}`);
 export const getComments = (postId: number) => api.get(`/comments/${postId}`);
-export const addComment = (postId: number, content: string) => api.post(`/comments/${postId}`, content, {
-  headers: { 'Content-Type': 'text/plain' }
-});
+export const addComment = (postId: number, content: string) => api.post(`/comments/${postId}`, { content });
+export const deleteComment = (commentId: number) => api.delete(`/comments/${commentId}`);
+export const updateComment = (commentId: number, content: string) => api.put(`/comments/${commentId}`, { content });
 
 export default api;

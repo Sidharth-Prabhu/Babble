@@ -22,6 +22,11 @@ public class StoryService {
     private final String UPLOAD_DIR = "uploads/";
 
     public Story createStory(MultipartFile file, User user) throws IOException {
+        String contentType = file.getContentType();
+        if (contentType == null || (!contentType.startsWith("image/") && !contentType.startsWith("video/"))) {
+            throw new IllegalArgumentException("Only photos and videos are allowed");
+        }
+        
         Path uploadPath = Paths.get(UPLOAD_DIR);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
@@ -31,7 +36,6 @@ public class StoryService {
         Path filePath = uploadPath.resolve(fileName);
         Files.copy(file.getInputStream(), filePath);
 
-        String contentType = file.getContentType();
         String mediaType = (contentType != null && contentType.startsWith("video")) ? "video" : "image";
 
         Story story = Story.builder()

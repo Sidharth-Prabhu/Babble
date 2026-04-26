@@ -57,6 +57,9 @@ public class UserService {
     }
 
     public String uploadProfileImage(String username, MultipartFile file) throws IOException {
+        if (file.getContentType() == null || !file.getContentType().startsWith("image/")) {
+            throw new IllegalArgumentException("Only images are allowed for profile pictures");
+        }
         String fileName = saveFile(file, "profile_");
         User user = userRepository.findByUsername(username).orElseThrow();
         user.setProfilePictureUrl("/" + UPLOAD_DIR + fileName);
@@ -65,6 +68,9 @@ public class UserService {
     }
 
     public String uploadBannerImage(String username, MultipartFile file) throws IOException {
+        if (file.getContentType() == null || !file.getContentType().startsWith("image/")) {
+            throw new IllegalArgumentException("Only images are allowed for banner pictures");
+        }
         String fileName = saveFile(file, "banner_");
         User user = userRepository.findByUsername(username).orElseThrow();
         user.setBannerUrl("/" + UPLOAD_DIR + fileName);

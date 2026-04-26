@@ -31,11 +31,10 @@ public class Post {
     private String mediaUrl;
 
     @Column(nullable = false)
-    private String mediaType; // "image" or "video"
+    private String mediaType; 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User user;
 
     private LocalDateTime createdAt;

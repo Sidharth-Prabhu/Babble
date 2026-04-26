@@ -7,6 +7,7 @@ import com.example.demo.repository.LikeRepository;
 import com.example.demo.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,9 +17,10 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
 
+    @Transactional
     public boolean toggleLike(Long postId, User user) {
         Post post = postRepository.findById(postId).orElseThrow();
-        Optional<Like> existingLike = likeRepository.findByUserAndPost(user, post);
+        Optional<Like> existingLike = likeRepository.findByUserIdAndPostId(user.getId(), postId);
 
         if (existingLike.isPresent()) {
             likeRepository.delete(existingLike.get());

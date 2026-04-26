@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, Upload, Tag, FileText } from 'lucide-react';
 import api from '../utils/api';
+import ImageCropper from './ImageCropper';
 import './UploadPage.css';
 
 interface UploadPageProps {
@@ -14,6 +15,9 @@ const UploadPage: React.FC<UploadPageProps> = ({ onClose, onUploadSuccess }) => 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
+  // Cropper state
+  const [cropImage, setCropImage] = useState<string | null>(null);
+  
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -23,14 +27,35 @@ const UploadPage: React.FC<UploadPageProps> = ({ onClose, onUploadSuccess }) => 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selectedFile = e.target.files[0];
-      setFile(selectedFile);
       
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(selectedFile);
+      if (selectedFile.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setCropImage(reader.result as string);
+        };
+        reader.readAsDataURL(selectedFile);
+      } else {
+        // For videos, skip cropping
+        setFile(selectedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreview(reader.result as string);
+        };
+        reader.readAsDataURL(selectedFile);
+      }
     }
+  };
+
+  const handleCropComplete = async (croppedImageBlob: Blob) => {
+    setCropImage(null);
+    const croppedFile = new File([croppedImageBlob], 'post-image.jpg', { type: 'image/jpeg' });
+    setFile(croppedFile);
+    
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result as string);
+    };
+    reader.readAsDataURL(croppedFile);
   };
 
   const handleUpload = async (e: React.FormEvent) => {
@@ -135,6 +160,15 @@ const UploadPage: React.FC<UploadPageProps> = ({ onClose, onUploadSuccess }) => 
           </div>
         </form>
       </div>
+
+      {cropImage && (
+        <ImageCropper 
+          image={cropImage} 
+          aspect={1} // 1:1 square for posts
+          onCropComplete={handleCropComplete} 
+          onCancel={() => setCropImage(null)} 
+        />
+      )}
     </div>
   );
 };
